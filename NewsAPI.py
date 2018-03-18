@@ -7,18 +7,41 @@ def printJSON(JSON):
 	print(json.dumps(JSON, indent=4))
 
 
+# Get list of all english sources
+url = ('https://newsapi.org/v2/sources?'
+       'language=en&'
+       'country=us&'
+       'category=general&'
+       'apiKey=' + news_key)
+
+response = requests.get(url).json()
+
+sources = ''
+
+
+
+for source in response['sources']:
+    sources = sources + source['id'] + ', '
+
+# Omit last comma
+sources = sources[:-2]
+
+
+# Save query
 url = ('https://newsapi.org/v2/everything?'
        'q=rex tillerson fired&'
        'language=en&'
-       'pagesize=100&'
+       'pagesize=5&'
+       'sources=' + sources + '&'
        'apiKey=' + news_key)
-
-
-# Get list of articles
 response = requests.get(url).json()
 
-print(similarity("Sachin is the greatest batsman",
-           "Tendulkar is the finest cricketer"))
+# Create matrix of relevancy
+relevance = []
 
-# printJSON(response)
+# for article in response['articles']:
+
+printJSON(response)
+
+
 
