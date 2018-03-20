@@ -94,11 +94,9 @@ def addEvent(query):
 
 addEvent('rex +tillerson fired')
 addEvent('Stephen +hawking died')
-addEvent('shooting great mills high school maryland')
-addEvent('Toys R Us close stores')
+# addEvent('shooting great mills high school maryland')
+# addEvent('Toys R Us close stores')
 
-
-print(publishdelay)
 
 # Create average delay dict
 publishdelayg = {}
@@ -107,8 +105,10 @@ for source in publishdelay:
 	if publishdelay[source]:
 		publishdelayg[source] = sum(publishdelay[source])/len(publishdelay[source])
 
+print(publishdelayg)
+print(len(list(publishdelayg.values())))
+print(len(list(publishdelayg.keys())))
 
-print(list(publishdelay.values()))
 
 # Plot bar graph
 
