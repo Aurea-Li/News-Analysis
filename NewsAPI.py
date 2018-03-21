@@ -105,15 +105,14 @@ for source in publishdelay:
 	if publishdelay[source]:
 		publishdelayg[source] = sum(publishdelay[source])/len(publishdelay[source])
 
-print(publishdelayg)
-print(len(list(publishdelayg.values())))
-print(len(list(publishdelayg.keys())))
+
+
 
 
 # Plot bar graph
 
-plt.bar(range(len(publishdelayg)), list(publishdelay.values()), align='center')
-plt.xticks(range(len(publishdelayg)), list(publishdelay.keys()))
+plt.bar(range(len(publishdelayg)), list(publishdelayg.values()), align='center')
+plt.xticks(range(len(publishdelayg)), list(publishdelayg.keys()))
 plt.ylabel('Minutes')
 plt.title('Average Publish Delay')
 
