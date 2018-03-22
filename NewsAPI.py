@@ -38,7 +38,8 @@ for source in response['sources']:
 # Omit last comma
 sources = sources[:-2]
 
-
+# text = open('Output.txt', "w")
+# text.write(sources + "\n\n")
 
 def addEvent(query):
 
@@ -50,12 +51,16 @@ def addEvent(query):
 	url = ('https://newsapi.org/v2/everything?'
 	       'q=' + query + '&'
 	       'language=en&'
-	       'pagesize=100&'
+	       'pagesize=20&'
 	       'sources=' + sources + '&'
 		   'sortBy=relevancy&'
 	       'apiKey=' + news_key)
 
 	response = requests.get(url).json()
+
+
+	# text.write(json.dumps(response, indent=4))
+	# text.close()
 
 	for article in response['articles']:
 
@@ -92,7 +97,7 @@ def addEvent(query):
 	return None
 
 
-addEvent('rex +tillerson fired')
+# addEvent('rex +tillerson fired')
 addEvent('Stephen +hawking died')
 # addEvent('shooting great mills high school maryland')
 # addEvent('Toys R Us close stores')
@@ -111,9 +116,9 @@ for source in publishdelay:
 
 # Plot bar graph
 
-plt.bar(range(len(publishdelayg)), list(publishdelayg.values()), align='center')
-plt.xticks(range(len(publishdelayg)), list(publishdelayg.keys()))
-plt.ylabel('Minutes')
-plt.title('Average Publish Delay')
-
-plt.show()
+# plt.bar(range(len(publishdelayg)), list(publishdelayg.values()), align='center')
+# plt.xticks(range(len(publishdelayg)), list(publishdelayg.keys()))
+# plt.ylabel('Minutes')
+# plt.title('Average Publish Delay')
+#
+# plt.show()
