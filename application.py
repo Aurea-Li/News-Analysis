@@ -1,6 +1,9 @@
-from flask import Flask, flash, redirect, render_template, request, session
-
-from helper.py import AddEvent
+from flask import Flask, flash, redirect, render_template, request, session, send_file
+from io import BytesIO
+from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
+import numpy
+import matplotlib.pyplot as plt
+from helper import addEvent
 
 # Configure application
 app = Flask(__name__)
@@ -16,20 +19,14 @@ def after_request(response):
 @app.route("/", methods=["GET", "POST"])
 def index():
 
-    from io import BytesIO
-
-
     if request.method == "POST":
 
         if not request.form.get("query"):
             return render_template("apology.html")
 
-        q = request.form.get("query")
+        query = request.form.get("query")
 
-
-        response.headers['Content-Type'] = 'image/png'
-
-        return render_template("output.html")
+        return render_template("output.html", query = query)
 
     else:
         return render_template("index.html")
@@ -39,9 +36,23 @@ def index():
 
 @app.route("/fig")
 def fig():
+
     # Obtain graph from query
-    fig = AddEvent(q)
+    # fig = AddEvent(q)
+    # img = BytesIO()
+    # fig.savefig(img)
+    # img.seek(0)
+
+    # Dummy plot
+    t = numpy.arange(0.0, 2.0, 0.01)
+    s = 1 + numpy.sin(2*numpy.pi*t)
+    fig, ax = plt.subplots(1)
+    plt.plot(t, s)
+
+    # Converting it to bytes
+    canvas = FigureCanvas(fig)
     img = BytesIO()
     fig.savefig(img)
     img.seek(0)
-    return send_file(img, mimetype='image/png')
+
+    return send_file(img, mimetype='/png')

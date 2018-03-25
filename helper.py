@@ -111,9 +111,9 @@ def addEvent(query):
 
 
 # addEvent('rex +tillerson fired')
-plt = addEvent('Stephen +hawking died')
+# plt = addEvent('Stephen +hawking died')
 # addEvent('shooting great mills high school maryland')
 # addEvent('Toys R Us close stores')
 
 
-plt.show()
+
