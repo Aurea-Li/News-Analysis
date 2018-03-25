@@ -91,31 +91,29 @@ def addEvent(query):
 		# If article is published within 8 hours of first article
 		publishdelay[source].append((publishtimes[source] - time_zero).total_seconds() / 60)
 
-	return None
+
+	# Create average delay dict
+	publishdelayg = {}
+	for source in publishdelay:
+
+		if publishdelay[source]:
+			publishdelayg[source] = sum(publishdelay[source])/len(publishdelay[source])
+
+	# Create matplotlib figure
+	plt.bar(range(len(publishdelayg)), list(
+		publishdelayg.values()), align='center')
+	plt.xticks(range(len(publishdelayg)), list(publishdelayg.keys()))
+	plt.xticks(rotation=45)
+	plt.ylabel('Minutes')
+	plt.title('Average Publish Delay')
+	
+	return plt
 
 
 # addEvent('rex +tillerson fired')
-addEvent('Stephen +hawking died')
+plt = addEvent('Stephen +hawking died')
 # addEvent('shooting great mills high school maryland')
 # addEvent('Toys R Us close stores')
 
 
-# Create average delay dict
-publishdelayg = {}
-for source in publishdelay:
-
-	if publishdelay[source]:
-		publishdelayg[source] = sum(publishdelay[source])/len(publishdelay[source])
-
-
-
-
-
-# Plot bar graph
-
-# plt.bar(range(len(publishdelayg)), list(publishdelayg.values()), align='center')
-# plt.xticks(range(len(publishdelayg)), list(publishdelayg.keys()))
-# plt.ylabel('Minutes')
-# plt.title('Average Publish Delay')
-#
-# plt.show()
+plt.show()
