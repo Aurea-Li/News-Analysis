@@ -34,20 +34,29 @@ def index():
 
 # TODO: Embed python graph 
 
-@app.route("/fig")
-def fig():
+@app.route("/fig/<query>")
+def fig(query):
 
-    # Obtain graph from query
-    # fig = AddEvent(q)
-    # img = BytesIO()
-    # fig.savefig(img)
-    # img.seek(0)
+    # Obtain dict from query
+    delaydict = addEvent(query)
+
+    # print(delaydict)
+
+    # Create matplotlib figure
+    fig, ax = plt.subplots(1)
+    
+    plt.bar(range(len(delaydict)), list(delaydict.values()), align='center')
+    plt.xticks(range(len(delaydict)), list(delaydict.keys()))
+    plt.xticks(rotation=45)
+    plt.ylabel('Minutes')
+    plt.title('Average Publish Delay')
+
 
     # Dummy plot
-    t = numpy.arange(0.0, 2.0, 0.01)
-    s = 1 + numpy.sin(2*numpy.pi*t)
-    fig, ax = plt.subplots(1)
-    plt.plot(t, s)
+    # t = numpy.arange(0.0, 2.0, 0.01)
+    # s = 1 + numpy.sin(2*numpy.pi*t)
+    # fig, ax = plt.subplots(1)
+    # plt.plot(t, s)
 
     # Converting it to bytes
     canvas = FigureCanvas(fig)

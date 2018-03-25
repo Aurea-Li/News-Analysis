@@ -17,26 +17,7 @@ def similarityscore(title1, title2):
 		return similarity(title1,title2)['normalized_score']
 
 
-
-# Get list of all english sources
-url = ('https://newsapi.org/v2/sources?'
-       'language=en&'
-       'country=us&'
-       'category=general&'
-       'apiKey=' + news_key)
-
-response = requests.get(url).json()
-
-# Initialize publishdelay dictionary and create source list
-sources = ''
-publishdelay = {}
-
-for source in response['sources']:
-	sources = sources + source['id'] + ', '
-	publishdelay[source['id']] = []
-
-# Omit last comma
-sources = sources[:-2]
+newsAPI_sources = 'associated-press, cnn, abc-news, the-hill, the-new-york-times, the-washington-post'
 
 # text = open('Output.txt', "w")
 # text.write(sources + "\n\n")
@@ -52,7 +33,7 @@ def addEvent(query):
 	       'q=' + query + '&'
 	       'language=en&'
 	       'pagesize=20&'
-	       'sources=' + sources + '&'
+	       'sources=' + newsAPI_sources + '&'
 		   'sortBy=relevancy&'
 	       'apiKey=' + news_key)
 
@@ -102,20 +83,13 @@ def addEvent(query):
 	# Sort values
 	publishdelayg = dict(sorted(publishdelayg.items(), key=lambda x: x[1]))
 
-	# Create matplotlib figure
-	plt.bar(range(len(publishdelayg)), list(
-		publishdelayg.values()), align='center')
-	plt.xticks(range(len(publishdelayg)), list(publishdelayg.keys()))
-	plt.xticks(rotation=45)
-	plt.ylabel('Minutes')
-	plt.title('Average Publish Delay')
 	
-	return plt
+	return publishdelayg
 
 # addEvent('rex +tillerson fired')
-# plt = addEvent('Stephen +hawking died')
+# test = addEvent('Stephen +hawking died')
 # addEvent('shooting great mills high school maryland')
 # addEvent('Toys R Us close stores')
 
 
-
+# print(test)
