@@ -19,14 +19,13 @@ def similarityscore(title1, title2):
 
 newsAPI_sources = 'associated-press, cnn, abc-news, the-hill, the-new-york-times, the-washington-post'
 
-# text = open('Output.txt', "w")
-# text.write(sources + "\n\n")
 
 def addEvent(query):
 
 	# Publish time, publish time delay dicts
 	publishtimes = {}
 	publishtitle = {}
+	publishdelay = {}
 
 
 	url = ('https://newsapi.org/v2/everything?'
@@ -39,6 +38,9 @@ def addEvent(query):
 
 	response = requests.get(url).json()
 
+	printJSON(response)
+
+	#TODO: Change data structure to dictionary tuple
 
 	for article in response['articles']:
 
@@ -67,29 +69,31 @@ def addEvent(query):
 	# Calculate delay time of every other article
 
 	for source in publishtimes:
-
-		# If article is published within 8 hours of first article
-		publishdelay[source].append((publishtimes[source] - time_zero).total_seconds() / 60.0)
-
-
-	# Create average delay dict
-	publishdelayg = {}
-	for source in publishdelay:
-
-		if publishdelay[source]:
-			publishdelayg[source] = sum(publishdelay[source])/len(publishdelay[source])
+		publishdelay[source] = (publishtimes[source] - time_zero).total_seconds() / 60.0
 
 	# TODO: Save publishdelayg as tuple and use it in plt instead of converting back to dict
 	# Sort values
-	publishdelayg = dict(sorted(publishdelayg.items(), key=lambda x: x[1]))
+	publishdelayg = dict(sorted(publishdelay.items(), key=lambda x: x[1]))
 
 	
 	return publishdelayg
 
 # addEvent('rex +tillerson fired')
-# test = addEvent('Stephen +hawking died')
+delaydict = addEvent('Stephen +hawking died')
 # addEvent('shooting great mills high school maryland')
 # addEvent('Toys R Us close stores')
 
+ 
 
-# print(test)
+# print(delaydict)
+
+# Create matplotlib figure
+fig, ax = plt.subplots(1)
+
+plt.bar(range(len(delaydict)), list(delaydict.values()), align='center')
+plt.xticks(range(len(delaydict)), list(delaydict.keys()))
+plt.xticks(rotation=45)
+plt.ylabel('Minutes')
+plt.title('Average Publish Delay')
+plt.tight_layout()
+plt.show()
