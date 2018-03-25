@@ -59,9 +59,6 @@ def addEvent(query):
 	response = requests.get(url).json()
 
 
-	# text.write(json.dumps(response, indent=4))
-	# text.close()
-
 	for article in response['articles']:
 
 		# Check if article is deemed relevant enough
