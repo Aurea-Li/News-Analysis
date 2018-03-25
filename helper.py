@@ -86,10 +86,9 @@ def addEvent(query):
 	# Calculate delay time of every other article
 
 	for source in publishtimes:
-		minutes = (publishtimes[source] - time_zero).total_seconds() / 60
 
 		# If article is published within 8 hours of first article
-		publishdelay[source].append((publishtimes[source] - time_zero).total_seconds() / 60)
+		publishdelay[source].append((publishtimes[source] - time_zero).total_seconds() / 60.0)
 
 
 	# Create average delay dict
@@ -98,6 +97,10 @@ def addEvent(query):
 
 		if publishdelay[source]:
 			publishdelayg[source] = sum(publishdelay[source])/len(publishdelay[source])
+
+	# TODO: Save publishdelayg as tuple and use it in plt instead of converting back to dict
+	# Sort values
+	publishdelayg = dict(sorted(publishdelayg.items(), key=lambda x: x[1]))
 
 	# Create matplotlib figure
 	plt.bar(range(len(publishdelayg)), list(
@@ -108,7 +111,6 @@ def addEvent(query):
 	plt.title('Average Publish Delay')
 	
 	return plt
-
 
 # addEvent('rex +tillerson fired')
 # plt = addEvent('Stephen +hawking died')
