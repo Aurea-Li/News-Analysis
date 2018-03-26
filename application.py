@@ -32,31 +32,24 @@ def index():
         return render_template("index.html")
 
 
-# TODO: Embed python graph 
-
+# Embed graph
 @app.route("/fig/<query>")
 def fig(query):
 
     # Obtain dict from query
     delaydict = addEvent(query)
 
-    # print(delaydict)
 
     # Create matplotlib figure
     fig, ax = plt.subplots(1)
-    
-    plt.bar(range(len(delaydict)), list(delaydict.values()), align='center')
-    plt.xticks(range(len(delaydict)), list(delaydict.keys()))
+
+    plt.bar(range(len(delaydict)), [delaydict[key][2] for key in delaydict], align='center')
+    plt.xticks(range(len(delaydict)), [key for key in delaydict])
     plt.xticks(rotation=45)
     plt.ylabel('Minutes')
     plt.title('Average Publish Delay')
+    plt.tight_layout()
 
-
-    # Dummy plot
-    # t = numpy.arange(0.0, 2.0, 0.01)
-    # s = 1 + numpy.sin(2*numpy.pi*t)
-    # fig, ax = plt.subplots(1)
-    # plt.plot(t, s)
 
     # Converting it to bytes
     canvas = FigureCanvas(fig)

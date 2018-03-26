@@ -22,9 +22,7 @@ newsAPI_sources = 'associated-press, cnn, abc-news, the-hill, the-new-york-times
 
 def addEvent(query):
 
-	# Publish time, publish time delay dicts
-	publishtimes = {}
-	publishtitle = {}
+	# Initializing dict
 	publishdelay = {}
 
 
@@ -38,62 +36,30 @@ def addEvent(query):
 
 	response = requests.get(url).json()
 
-	printJSON(response)
-
-	#TODO: Change data structure to dictionary tuple
-
 	for article in response['articles']:
 
+
 		# Check if article is deemed relevant enough
-		if similarityscore(query, article['title']) >= 3:
+		if similarityscore(query, article['title']) >= 3.5:
 
 			id = article['source']['id']
 
 			# If multiple articles from same source found, save earliest one
-			if id in publishtimes and convertDatetime(article['publishedAt']) < publishtimes[id]:
+			if id in publishdelay and convertDatetime(article['publishedAt']) < publishdelay[id][0]:
 
-				publishtimes[id] = convertDatetime(article['publishedAt'])
-				publishtitle[id] = article['title']
+				publishdelay[id] = [convertDatetime(article['publishedAt']), article['title']]
 
 
-			elif id not in publishtimes:
+			elif id not in publishdelay:
 
-				publishtimes[id] = convertDatetime(article['publishedAt'])
-				publishtitle[id] = article['title']
-
+				publishdelay[id] = [convertDatetime(article['publishedAt']), article['title']]
 
 	# Get time of earliest published article (time zero)
-	time_zero = min(publishtimes.values())
+	time_zero = min([publishdelay[key][0] for key in publishdelay])
 
 
 	# Calculate delay time of every other article
+	for source in publishdelay:
+		publishdelay[source].append( (publishdelay[source][0] - time_zero).total_seconds() / 60.0 )
 
-	for source in publishtimes:
-		publishdelay[source] = (publishtimes[source] - time_zero).total_seconds() / 60.0
-
-	# TODO: Save publishdelayg as tuple and use it in plt instead of converting back to dict
-	# Sort values
-	publishdelayg = dict(sorted(publishdelay.items(), key=lambda x: x[1]))
-
-	
-	return publishdelayg
-
-# addEvent('rex +tillerson fired')
-delaydict = addEvent('Stephen +hawking died')
-# addEvent('shooting great mills high school maryland')
-# addEvent('Toys R Us close stores')
-
- 
-
-# print(delaydict)
-
-# Create matplotlib figure
-fig, ax = plt.subplots(1)
-
-plt.bar(range(len(delaydict)), list(delaydict.values()), align='center')
-plt.xticks(range(len(delaydict)), list(delaydict.keys()))
-plt.xticks(rotation=45)
-plt.ylabel('Minutes')
-plt.title('Average Publish Delay')
-plt.tight_layout()
-plt.show()
+	return publishdelay
