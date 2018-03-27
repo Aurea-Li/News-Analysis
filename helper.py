@@ -37,7 +37,7 @@ def addEvent(query):
 	response = requests.get(url).json()
 
 	text = open('JSON.txt', 'w')
-	text.write(response)
+	text.write(json.dumps(response, indent=4))
 	text.close()
 
 	for article in response['articles']:
