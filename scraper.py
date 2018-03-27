@@ -12,21 +12,11 @@ def waposcraper(url, output):
     soup = BeautifulSoup(urllib.request.urlopen(url), 'html.parser')
     text = open(str(output) + '.txt', "w", encoding='utf8')
 
-
-    # for article in soup.find_all('article'):
-    #     print('article found')
-    #     if article['class'] == ['paywall']:
-
-    # Determine format
-
-
     article = ''
 
     # Finding all paragraphs
     for p in soup.article.find_all('p'):
 
-
-        # print(str(p.attrs))
 
         # Excluding photo captions and author info
         if 'class' not in p.attrs:
@@ -43,18 +33,3 @@ waposcraper(webpage, 'wapo')
 waposcraper(webpage2, 'wapo2')
 waposcraper(webpage3, 'wapo3')
 waposcraper(webpage4,'wapo4')
-
-
-# soup = BeautifulSoup(page, 'html.parser')
-#
-# def getText(articleUrl):
-#     html = urllib.request.urlopen(articleUrl).read()
-#     soup = BeautifulSoup(html)
-#     article = soup.body.findAll('article')
-#     text = ' '.join([clean(s.text) for s in article[0].findAll('p')])
-#
-#     print(text)
-#     return text
-#
-#
-# getText(article)

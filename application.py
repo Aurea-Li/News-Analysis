@@ -42,9 +42,10 @@ def fig(query):
 
     # Create matplotlib figure
     fig, ax = plt.subplots(1)
-
     plt.bar(range(len(delaydict)), [delaydict[key][2] for key in delaydict], align='center')
     plt.xticks(range(len(delaydict)), [key for key in delaydict])
+
+    # Add labels, configure graph
     plt.xticks(rotation=45)
     plt.ylabel('Minutes')
     plt.title('Average Publish Delay')

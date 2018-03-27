@@ -36,6 +36,10 @@ def addEvent(query):
 
 	response = requests.get(url).json()
 
+	text = open('JSON.txt', 'w')
+	text.write(response)
+	text.close()
+
 	for article in response['articles']:
 
 
@@ -63,3 +67,6 @@ def addEvent(query):
 		publishdelay[source].append( (publishdelay[source][0] - time_zero).total_seconds() / 60.0 )
 
 	return publishdelay
+
+
+delaydict = addEvent('stephen hawking dies')
