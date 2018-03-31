@@ -8,10 +8,11 @@ webpage4 = 'https://www.washingtonpost.com/news/dr-gridlock/wp/2018/03/22/airlin
 
 hill1 = 'http://thehill.com/homenews/media/373312-laura-benanti-i-like-to-think-that-we-are-all-melania-trump-now'
 hill2 = 'http://thehill.com/homenews/state-watch/380458-blue-states-sue-trump-over-census-citizenship-question'
+
 def waposcraper(url, output):
 
     soup = BeautifulSoup(urllib.request.urlopen(url), 'html.parser')
-    text = open(str(output) + '.txt', "w", encoding='utf8')
+    text = open(str(output) + '.txt', 'w', encoding='utf8')
 
     article = ''
 
@@ -28,22 +29,34 @@ def waposcraper(url, output):
     text.write(article)
     text.close()
 
-def hillscraper(url, output):
+#TODO: Improve scraper
+def hillscraper(url, textname):
+    """
+    url: string
+    textname: string
+    Output: text file with textname containing article
+    """
 
     soup = BeautifulSoup(urllib.request.urlopen(url), 'html.parser')
-    text = open(str(output) + '.txt', "w", encoding='utf8')
+    text = open(str(textname) + '.txt', 'wb')
 
-    article = ''
+    firstparagraphs = soup.find('div', {'class':'field-item even', 'property': 'content:encoded'}).find_all(['p'])
 
-    # Finding all paragraphs
-    for div in soup.article.find_all('div'):
-        # for p in div.find_all('p'):
 
-        if 'content-wrp' in div['class']:
-            for div in div.find_all('div'):
-                print(div.attrs)
-                for string in div.strings:
-                    print(string)
+    # Getting rid of annoying hyperlinks to other articles
+    for p in firstparagraphs:
+        for sp in p.find_all('span'):
+            for sp2 in sp.find_all('span'):
+
+                sp2.decompose()
+
+
+
+    article = b'\n'.join([p.text.encode('utf8') for p in firstparagraphs])       
+
+    secondparagraphs = soup.find_all('div', {'class': 'ra-module'})
+
+    article += b'\n'.join([p.text.encode('utf8') for p in secondparagraphs])
 
 
 
@@ -70,7 +83,7 @@ def hillscraper(url, output):
 
 
 hillscraper(hill1, 'hill1')
-# hillscraper(hill2, 'hill2')
+hillscraper(hill2, 'hill2')
 # waposcraper(webpage, 'wapo')
 # waposcraper(webpage2, 'wapo2')
 # waposcraper(webpage3, 'wapo3')
