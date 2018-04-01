@@ -113,13 +113,38 @@ def nytscraper(url, textname):
 
     article = b''
 
+    paragraphs = soup.find_all('div', {'class':['story-body story-body-1','story-body story-body-2']})
+
+
+    # Remove annoying text ads
+    ads = soup.select('div[class*=story-ad]')
+    [ad.decompose() for ad in ads]
+
+    # Remove figure captions
+    caption = soup.select('figure')
+    if caption:
+        [cap.decompose() for cap in caption]
+
+    # Remove newsletter signup
+    newsletter = soup.select('div[class*=newsletter-signup]')
+    [news.decompose() for news in newsletter]
+
+    for div in paragraphs:
+        article += b'\n'.join([p.text.encode('utf8') for p in div.find_all('p')])       
+
+    text.write(article)
+    text.close()
+
+def nytscraper_opinion(url, textname):
+
+    soup = BeautifulSoup(urllib.request.urlopen(url), 'html.parser')
+    text = open(str(textname) + '.txt', 'wb')
+
+    article = b''
+
     paragraphs = soup.find_all('div', class_='StoryBodyCompanionColumn css-1fhj3dt emamhsk0')
 
     for div in paragraphs:
-        # print([p for p in div.find_all('p')])
-    # paragraphs = soup.find('p', class_='css-1xyeyil e2kc3sl0')
-
-    # print(paragraphs)
         article += b'\n'.join([p.text.encode('utf8') for p in div.find_all('p')])       
 
    
@@ -147,7 +172,7 @@ def nytscraper(url, textname):
 
 nytscraper(nyt1, filepath + 'nyt1')
 nytscraper(nyt2, filepath + 'nyt2')
-
+nytscraper(nyt3, filepath + 'nyt3')
 # hillscraper(hill1, 'hill1')
 # hillscraper(hill2, 'hill2')
 # waposcraper(webpage, 'wapo')
