@@ -16,6 +16,10 @@ ap1 = 'https://apnews.com/7fb0980b01e44421af41e6ef530c20b7'
 cnn1 = 'https://www.cnn.com/2018/02/23/asia/ivanka-trump-south-korea-olympics-intl/index.html'
 cnn2 = 'https://www.cnn.com/videos/politics/2018/02/21/rachel-crooks-trump-tweet-sot-ctn.cnn'
 
+nyt1 = 'https://www.nytimes.com/2018/02/22/opinion/guns-nasty-brutish-trump.html'
+nyt2 = 'https://www.nytimes.com/2018/02/03/us/politics/trump-memo-vindicates.html'
+nyt3 = 'https://www.nytimes.com/2018/02/14/us/politics/trump-immigration-veto-threat.html'
+
 def waposcraper(url, textname):
 
     soup = BeautifulSoup(urllib.request.urlopen(url), 'html.parser')
@@ -102,7 +106,26 @@ def cnnscraper(url, textname):
 
     text.close()
 
-    
+def nytscraper(url, textname):
+
+    soup = BeautifulSoup(urllib.request.urlopen(url), 'html.parser')
+    text = open(str(textname) + '.txt', 'wb')
+
+    article = b''
+
+    paragraphs = soup.find_all('div', class_='StoryBodyCompanionColumn css-1fhj3dt emamhsk0')
+
+    for div in paragraphs:
+        # print([p for p in div.find_all('p')])
+    # paragraphs = soup.find('p', class_='css-1xyeyil e2kc3sl0')
+
+    # print(paragraphs)
+        article += b'\n'.join([p.text.encode('utf8') for p in div.find_all('p')])       
+
+   
+    text.write(article)
+    text.close()
+
 
 # from AUTH import news_key
 # import requests, json
@@ -110,17 +133,20 @@ def cnnscraper(url, textname):
 #        'q=trump&'
 #        'language=en&'
 #        'pagesize=20&'
-#        'sources=cnn&'
+#        'sources=the-new-york-times&'
 # 	   'sortBy=relevancy&'
 #        'apiKey=' + news_key)
 
 # response = requests.get(url).json()
 
-# text = open('JSON.txt', 'w')
+# text = open(filepath + 'JSON.txt', 'w')
 # text.write(json.dumps(response, indent=4))
 # text.close()
 
 
+
+nytscraper(nyt1, filepath + 'nyt1')
+nytscraper(nyt2, filepath + 'nyt2')
 
 # hillscraper(hill1, 'hill1')
 # hillscraper(hill2, 'hill2')
@@ -130,5 +156,7 @@ def cnnscraper(url, textname):
 # waposcraper(webpage4,'wapo4')
 
 # apscraper(ap1, '/Users/Aurea/Desktop/GitHub/News-Analysis/textfiles/ap1')
-cnnscraper(cnn1, filepath + 'cnn1')
-cnnscraper(cnn2, filepath + 'cnn2')
+# cnnscraper(cnn1, filepath + 'cnn1')
+# cnnscraper(cnn2, filepath + 'cnn2')
+
+
