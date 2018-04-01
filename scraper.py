@@ -1,6 +1,8 @@
 import urllib.request
 from bs4 import BeautifulSoup
 
+filepath = '/Users/Aurea/Desktop/GitHub/News-Analysis/textfiles/'
+
 webpage = 'https://www.washingtonpost.com/world/europe/family-spokesman-says-physicist-stephen-hawking-has-died-at-the-age-of-76/2018/03/13/0e3a1474-273c-11e8-a227-fd2b009466bc_story.html'
 webpage2 = 'https://www.washingtonpost.com/powerpost/house-prepares-for-rapid-vote-today-on-jam-packed-13-trillion-spending-deal/2018/03/22/2074fe7e-2dd6-11e8-8688-e053ba58f1e4_story.html?utm_term=.28c8b14d411e'
 webpage3 = 'https://www.washingtonpost.com/politics/trump-attorney-john-dowd-resigns-amid-shake-up-in-presidents-legal-team/2018/03/22/0472ce74-2de3-11e8-8688-e053ba58f1e4_story.html?utm_term=.4933de724e33'
@@ -10,6 +12,9 @@ hill1 = 'http://thehill.com/homenews/media/373312-laura-benanti-i-like-to-think-
 hill2 = 'http://thehill.com/homenews/state-watch/380458-blue-states-sue-trump-over-census-citizenship-question'
 
 ap1 = 'https://apnews.com/7fb0980b01e44421af41e6ef530c20b7'
+
+cnn1 = 'https://www.cnn.com/2018/02/23/asia/ivanka-trump-south-korea-olympics-intl/index.html'
+cnn2 = 'https://www.cnn.com/videos/politics/2018/02/21/rachel-crooks-trump-tweet-sot-ctn.cnn'
 
 def waposcraper(url, textname):
 
@@ -49,7 +54,6 @@ def hillscraper(url, textname):
     for p in firstparagraphs:
         for sp in p.find_all('span'):
             for sp2 in sp.find_all('span'):
-
                 sp2.decompose()
 
 
@@ -65,30 +69,40 @@ def hillscraper(url, textname):
     text.write(article)
     text.close()
 
+
 def apscraper(url, textname):
-    """
-    url: string
-    textname: string
-    Output: text file with textname containing article
-    """
 
     soup = BeautifulSoup(urllib.request.urlopen(url), 'html.parser')
     text = open(str(textname) + '.txt', 'wb')
 
-    firstparagraphs = soup.find('div', {'class':'articleBody'}).find_all(['p'])
-
-
-
-    article = b'\n'.join([p.text.encode('utf8') for p in firstparagraphs])       
-
-    # secondparagraphs = soup.find_all('div', {'class': 'ra-module'})
-
-    # article += b'\n'.join([p.text.encode('utf8') for p in secondparagraphs])
-
-
+    paragraphs = soup.find('div', {'class':'articleBody'}).find_all(['p'])
+    article = b'\n'.join([p.text.encode('utf8') for p in paragraphs])       
 
     text.write(article)
     text.close()
+
+#TODO: could refine
+def cnnscraper(url, textname):
+
+    soup = BeautifulSoup(urllib.request.urlopen(url), 'html.parser')
+    text = open(str(textname) + '.txt', 'wb')
+
+    # Check if link is to video (no article)
+    if soup.find('div', {'itemprop':'articleBody'}):
+
+        paragraphs = soup.find('div', {'itemprop':'articleBody'}).find_all(True, {'class': ['zn-body__paragraph', 'zn-body__paragraph speakable']})
+
+
+
+        article = b'\n'.join([p.text.encode('utf8') for p in paragraphs])      
+        text.write(article)
+
+    else: 
+        text.write(b'No text available: video')
+
+    text.close()
+
+    
 
 # from AUTH import news_key
 # import requests, json
@@ -96,7 +110,7 @@ def apscraper(url, textname):
 #        'q=trump&'
 #        'language=en&'
 #        'pagesize=20&'
-#        'sources=associated-press&'
+#        'sources=cnn&'
 # 	   'sortBy=relevancy&'
 #        'apiKey=' + news_key)
 
@@ -115,4 +129,6 @@ def apscraper(url, textname):
 # waposcraper(webpage3, 'wapo3')
 # waposcraper(webpage4,'wapo4')
 
-apscraper(ap1, '/Users/Aurea/Desktop/GitHub/News-Analysis/textfiles/ap1')
+# apscraper(ap1, '/Users/Aurea/Desktop/GitHub/News-Analysis/textfiles/ap1')
+cnnscraper(cnn1, filepath + 'cnn1')
+cnnscraper(cnn2, filepath + 'cnn2')

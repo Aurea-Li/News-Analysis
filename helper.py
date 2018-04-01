@@ -69,4 +69,4 @@ def addEvent(query):
 	return publishdelay
 
 
-delaydict = addEvent('stephen hawking dies')
+# delaydict = addEvent('stephen hawking dies')
