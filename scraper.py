@@ -9,10 +9,12 @@ webpage4 = 'https://www.washingtonpost.com/news/dr-gridlock/wp/2018/03/22/airlin
 hill1 = 'http://thehill.com/homenews/media/373312-laura-benanti-i-like-to-think-that-we-are-all-melania-trump-now'
 hill2 = 'http://thehill.com/homenews/state-watch/380458-blue-states-sue-trump-over-census-citizenship-question'
 
-def waposcraper(url, output):
+ap1 = 'https://apnews.com/7fb0980b01e44421af41e6ef530c20b7'
+
+def waposcraper(url, textname):
 
     soup = BeautifulSoup(urllib.request.urlopen(url), 'html.parser')
-    text = open(str(output) + '.txt', 'w', encoding='utf8')
+    text = open(str(textname) + '.txt', 'w', encoding='utf8')
 
     article = ''
 
@@ -63,6 +65,30 @@ def hillscraper(url, textname):
     text.write(article)
     text.close()
 
+def apscraper(url, textname):
+    """
+    url: string
+    textname: string
+    Output: text file with textname containing article
+    """
+
+    soup = BeautifulSoup(urllib.request.urlopen(url), 'html.parser')
+    text = open(str(textname) + '.txt', 'wb')
+
+    firstparagraphs = soup.find('div', {'class':'articleBody'}).find_all(['p'])
+
+
+
+    article = b'\n'.join([p.text.encode('utf8') for p in firstparagraphs])       
+
+    # secondparagraphs = soup.find_all('div', {'class': 'ra-module'})
+
+    # article += b'\n'.join([p.text.encode('utf8') for p in secondparagraphs])
+
+
+
+    text.write(article)
+    text.close()
 
 # from AUTH import news_key
 # import requests, json
@@ -70,21 +96,23 @@ def hillscraper(url, textname):
 #        'q=trump&'
 #        'language=en&'
 #        'pagesize=20&'
-#        'sources=the-hill&'
+#        'sources=associated-press&'
 # 	   'sortBy=relevancy&'
 #        'apiKey=' + news_key)
-#
+
 # response = requests.get(url).json()
-#
+
 # text = open('JSON.txt', 'w')
 # text.write(json.dumps(response, indent=4))
 # text.close()
 
 
 
-hillscraper(hill1, 'hill1')
-hillscraper(hill2, 'hill2')
+# hillscraper(hill1, 'hill1')
+# hillscraper(hill2, 'hill2')
 # waposcraper(webpage, 'wapo')
 # waposcraper(webpage2, 'wapo2')
 # waposcraper(webpage3, 'wapo3')
 # waposcraper(webpage4,'wapo4')
+
+apscraper(ap1, '/Users/Aurea/Desktop/GitHub/News-Analysis/textfiles/ap1')
