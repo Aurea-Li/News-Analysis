@@ -42,7 +42,7 @@ def fig(query):
 
     # Create matplotlib figure
     fig, ax = plt.subplots(1)
-    plt.bar(range(len(delaydict)), [delaydict[key][2] for key in delaydict], align='center')
+    plt.bar(range(len(delaydict)), [delaydict[key]['delay time'] for key in delaydict], align='center')
     plt.xticks(range(len(delaydict)), [key for key in delaydict])
 
     # Add labels, configure graph

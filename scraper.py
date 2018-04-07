@@ -135,6 +135,7 @@ def nytscraper(url, textname):
     text.write(article)
     text.close()
 
+# Is this one even necessary?
 def nytscraper_opinion(url, textname):
 
     soup = BeautifulSoup(urllib.request.urlopen(url), 'html.parser')
@@ -150,6 +151,33 @@ def nytscraper_opinion(url, textname):
    
     text.write(article)
     text.close()
+
+
+def scrapArticle(url, id):
+
+
+    if id == 'associated-press':
+        textfp = filepath + 'AP.txt'
+        apscraper(url, textfp)
+    elif id == 'cnn':
+        textfp = filepath + 'CNN.txt'
+        cnnscraper(url, textfp)
+    elif id == 'the-hill':
+        textfp = filepath + 'The-Hill.txt'
+        hillscraper(url, textfp)
+    elif id == 'the-new-york-times':
+        textfp = filepath + 'NYT.txt
+        nytscraper(url, textfp)
+    elif id == 'the-washington-post':
+        textfp = filepath + 'WAPO.txt'
+        waposcraper(url, textfp)
+    else:
+        return ''
+
+    return textfp
+
+
+
 
 
 # from AUTH import news_key
