@@ -1,7 +1,7 @@
 from flask import Flask, flash, redirect, render_template, request, session, send_file
 from io import BytesIO
 from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
-import numpy
+import numpy as np
 import matplotlib.pyplot as plt
 from helper import addEvent
 
@@ -36,18 +36,22 @@ def index():
 @app.route("/fig/<query>")
 def fig(query):
 
-    # Obtain dict from query
     delaydict = addEvent(query)
 
+    # Creating x and y axis
+    x = [delaydict[key]['delay time'] for key in delaydict]
+    y = [delaydict[key]['word count'] for key in delaydict]
 
     # Create matplotlib figure
     fig, ax = plt.subplots(1)
-    plt.bar(range(len(delaydict)), [delaydict[key]['delay time'] for key in delaydict], align='center')
-    plt.xticks(range(len(delaydict)), [key for key in delaydict])
+    # plt.bar(range(len(delaydict)), [delaydict[key]['delay time'] for key in delaydict], align='center')
+    plt.scatter(x, y, color = 'k', s = 25, marker = 'o')
+    
+    # plt.xticks(range(len(delaydict)), [key for key in delaydict])
 
-    # Add labels, configure graph
-    plt.xticks(rotation=45)
-    plt.ylabel('Minutes')
+
+    plt.xlabel('Delay Time (minutes)')
+    plt.ylabel('Word Count')
     plt.title('Average Publish Delay')
     plt.tight_layout()
 

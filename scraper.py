@@ -23,7 +23,7 @@ nyt3 = 'https://www.nytimes.com/2018/02/14/us/politics/trump-immigration-veto-th
 def waposcraper(url, textname):
 
     soup = BeautifulSoup(urllib.request.urlopen(url), 'html.parser')
-    text = open(str(textname) + '.txt', 'w', encoding='utf8')
+    text = open(str(textname), 'w', encoding='utf8')
 
     article = ''
 
@@ -49,7 +49,7 @@ def hillscraper(url, textname):
     """
 
     soup = BeautifulSoup(urllib.request.urlopen(url), 'html.parser')
-    text = open(str(textname) + '.txt', 'wb')
+    text = open(str(textname), 'wb')
 
     firstparagraphs = soup.find('div', {'class':'field-item even', 'property': 'content:encoded'}).find_all(['p'])
 
@@ -77,7 +77,7 @@ def hillscraper(url, textname):
 def apscraper(url, textname):
 
     soup = BeautifulSoup(urllib.request.urlopen(url), 'html.parser')
-    text = open(str(textname) + '.txt', 'wb')
+    text = open(str(textname), 'wb')
 
     paragraphs = soup.find('div', {'class':'articleBody'}).find_all(['p'])
     article = b'\n'.join([p.text.encode('utf8') for p in paragraphs])       
@@ -89,7 +89,7 @@ def apscraper(url, textname):
 def cnnscraper(url, textname):
 
     soup = BeautifulSoup(urllib.request.urlopen(url), 'html.parser')
-    text = open(str(textname) + '.txt', 'wb')
+    text = open(str(textname), 'wb')
 
     # Check if link is to video (no article)
     if soup.find('div', {'itemprop':'articleBody'}):
@@ -109,7 +109,7 @@ def cnnscraper(url, textname):
 def nytscraper(url, textname):
 
     soup = BeautifulSoup(urllib.request.urlopen(url), 'html.parser')
-    text = open(str(textname) + '.txt', 'wb')
+    text = open(str(textname), 'wb')
 
     article = b''
 
@@ -139,7 +139,7 @@ def nytscraper(url, textname):
 def nytscraper_opinion(url, textname):
 
     soup = BeautifulSoup(urllib.request.urlopen(url), 'html.parser')
-    text = open(str(textname) + '.txt', 'wb')
+    text = open(str(textname), 'wb')
 
     article = b''
 
@@ -166,7 +166,7 @@ def scrapArticle(url, id):
         textfp = filepath + 'The-Hill.txt'
         hillscraper(url, textfp)
     elif id == 'the-new-york-times':
-        textfp = filepath + 'NYT.txt
+        textfp = filepath + 'NYT.txt'
         nytscraper(url, textfp)
     elif id == 'the-washington-post':
         textfp = filepath + 'WAPO.txt'
@@ -198,9 +198,9 @@ def scrapArticle(url, id):
 
 
 
-nytscraper(nyt1, filepath + 'nyt1')
-nytscraper(nyt2, filepath + 'nyt2')
-nytscraper(nyt3, filepath + 'nyt3')
+# nytscraper(nyt1, filepath + 'nyt1')
+# nytscraper(nyt2, filepath + 'nyt2')
+# nytscraper(nyt3, filepath + 'nyt3')
 # hillscraper(hill1, 'hill1')
 # hillscraper(hill2, 'hill2')
 # waposcraper(webpage, 'wapo')

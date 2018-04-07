@@ -1,6 +1,5 @@
 from collections import Counter
 
-
 def wordcounter(text):
 
     c = Counter()

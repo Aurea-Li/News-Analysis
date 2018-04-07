@@ -1,4 +1,4 @@
-import requests, json, numpy
+import requests, json
 import matplotlib.pyplot as plt
 
 from datetime import datetime
@@ -30,19 +30,9 @@ def getQuery(query):
 
 	return requests.get(url).json()
 
-
-newsAPI_sources = 'associated-press, cnn, the-hill, the-new-york-times, the-washington-post'
-
-
-def addEvent(query):
+def extractInfo(response, query):
 
 	publishdelay = {}
-
-	response = getQuery(query)
-
-	text = open('JSON.txt', 'w')
-	text.write(json.dumps(response, indent=4))
-	text.close()
 
 	for article in response['articles']:
 
@@ -71,10 +61,27 @@ def addEvent(query):
 	for source in publishdelay:
 		publishdelay[source]['delay time'] = (publishdelay[source]['datetime'] - time_zero).total_seconds() / 60.0 
 
-
 	return publishdelay
 
 
-delaydict = addEvent('stephen hawking dies')
 
+
+def addEvent(query):
+
+
+
+	response = getQuery(query)
+
+	text = open('JSON.txt', 'w')
+	text.write(json.dumps(response, indent=4))
+	text.close()
+
+	
+	return extractInfo(response, query)
+
+
+
+newsAPI_sources = 'associated-press, cnn, the-hill, the-new-york-times, the-washington-post'
+
+# print(addEvent('stephen hawking dies'))
 
