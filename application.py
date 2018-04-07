@@ -41,12 +41,21 @@ def fig(query):
     # Creating x and y axis
     x = [delaydict[key]['delay time'] for key in delaydict]
     y = [delaydict[key]['word count'] for key in delaydict]
+    labels = [key for key in delaydict]
 
     # Create matplotlib figure
     fig, ax = plt.subplots(1)
     # plt.bar(range(len(delaydict)), [delaydict[key]['delay time'] for key in delaydict], align='center')
-    plt.scatter(x, y, color = 'k', s = 25, marker = 'o')
+
     
+    plt.scatter(x, y, color = 'k', s = 25, marker = 'o')
+    # plt.text(x, y, label, fontsize=12)
+    
+    # Adding labels
+    #TODO: Labels are sometimes being cut off
+    for i, label in enumerate(labels):
+        plt.annotate(label, (x[i], y[i]), size = 6)
+
     # plt.xticks(range(len(delaydict)), [key for key in delaydict])
 
 
