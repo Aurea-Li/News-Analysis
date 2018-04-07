@@ -16,15 +16,7 @@ def convertDatetime(datet):
 def similarityscore(title1, title2):
 		return similarity(title1,title2)['normalized_score']
 
-
-newsAPI_sources = 'associated-press, cnn, abc-news, the-hill, the-new-york-times, the-washington-post'
-
-
-def addEvent(query):
-
-	# Initializing dict
-	publishdelay = {}
-
+def getQuery(query):
 
 	url = ('https://newsapi.org/v2/everything?'
 	       'q=' + query + '&'
@@ -34,7 +26,17 @@ def addEvent(query):
 		   'sortBy=relevancy&'
 	       'apiKey=' + news_key)
 
-	response = requests.get(url).json()
+	return requests.get(url).json()
+
+
+newsAPI_sources = 'associated-press, cnn, abc-news, the-hill, the-new-york-times, the-washington-post'
+
+
+def addEvent(query):
+
+	publishdelay = {}
+
+	response = getQuery(query)
 
 	text = open('JSON.txt', 'w')
 	text.write(json.dumps(response, indent=4))
@@ -42,31 +44,33 @@ def addEvent(query):
 
 	for article in response['articles']:
 
+		title = article['title']
 
 		# Check if article is deemed relevant enough
-		if similarityscore(query, article['title']) >= 3.5:
+		if similarityscore(query, title) >= 3.5:
 
 			id = article['source']['id']
 
 			# If multiple articles from same source found, save earliest one
-			if id in publishdelay and convertDatetime(article['publishedAt']) < publishdelay[id][0]:
+			if id in publishdelay and convertDatetime(article['publishedAt']) < publishdelay[id]['datetime']:
 
-				publishdelay[id] = [convertDatetime(article['publishedAt']), article['title']]
+				publishdelay[id] = {'datetime': convertDatetime(article['publishedAt']), 'title': title}
 
 
 			elif id not in publishdelay:
 
-				publishdelay[id] = [convertDatetime(article['publishedAt']), article['title']]
+				publishdelay[id] = {'datetime': convertDatetime(article['publishedAt']), 'title':  title}
 
 	# Get time of earliest published article (time zero)
-	time_zero = min([publishdelay[key][0] for key in publishdelay])
+	time_zero = min([publishdelay[key]['datetime'] for key in publishdelay])
 
 
 	# Calculate delay time of every other article
 	for source in publishdelay:
-		publishdelay[source].append( (publishdelay[source][0] - time_zero).total_seconds() / 60.0 )
+		publishdelay[source]['delay time'] = (publishdelay[source]['datetime'] - time_zero).total_seconds() / 60.0 
 
 	return publishdelay
 
 
-# delaydict = addEvent('stephen hawking dies')
+delaydict = addEvent('stephen hawking dies')
+print(delaydict)
