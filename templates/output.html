@@ -1,14 +1,7 @@
-<!DOCTYPE html>
-<html>
+{% extends "layout.html" %}
 
-
-<head>
-<title>Output : {{ query }}</title>
-</head>
-
-
-<body>
+{% block main %}
 <img src="{{ url_for('fig', query = query) }}" alt="Image Placeholder">
-</body>
+{% endblock %}
 
-</html>
+
