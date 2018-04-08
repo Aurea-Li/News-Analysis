@@ -25,8 +25,9 @@ def index():
             return render_template("apology.html")
 
         query = request.form.get("query")
+        delaydict = addEvent(query)
 
-        return render_template("output.html", query = query)
+        return render_template("output.html", query = query, delaydict = delaydict)
 
     else:
         return render_template("index.html")
@@ -45,19 +46,13 @@ def fig(query):
 
     # Create matplotlib figure
     fig, ax = plt.subplots(1)
-    # plt.bar(range(len(delaydict)), [delaydict[key]['delay time'] for key in delaydict], align='center')
-
     
     plt.scatter(x, y, color = 'k', s = 25, marker = 'o')
-    # plt.text(x, y, label, fontsize=12)
     
     # Adding labels
     #TODO: Labels are sometimes being cut off
     for i, label in enumerate(labels):
         plt.annotate(label, (x[i], y[i]), size = 6)
-
-    # plt.xticks(range(len(delaydict)), [key for key in delaydict])
-
 
     plt.xlabel('Delay Time (minutes)')
     plt.ylabel('Word Count')

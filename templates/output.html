@@ -1,7 +1,29 @@
 {% extends "layout.html" %}
 
 {% block main %}
+
 <img src="{{ url_for('fig', query = query) }}" alt="Image Placeholder">
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th> Source </th>
+            <th> Title </th>
+        </tr>
+    </thead>
+    <tbody>
+
+        {% for source in delaydict %}
+        <tr>
+            <td> {{ source }} </td>
+            <td> {{ delaydict[source]['title'] }} </td>
+        </tr>
+        {% endfor %}
+
+    </tbody>
+</table>
+
+
 {% endblock %}
 
 
