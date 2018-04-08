@@ -1,6 +1,6 @@
 import requests, json
 import matplotlib.pyplot as plt
-
+import urllib.request
 from datetime import datetime
 from paralleldots import similarity, ner, taxonomy, sentiment, keywords, intent, emotion, abuse
 from AUTH import news_key, pd_key
@@ -17,6 +17,14 @@ def convertDatetime(datet):
 
 def similarityscore(title1, title2):
 		return similarity(title1,title2)['normalized_score']
+
+def isvalidLink(url):
+	try:
+		urllib.request.urlopen(url)
+	except:
+		return False
+	return True
+
 
 def getQuery(query):
 
@@ -38,8 +46,8 @@ def extractInfo(response, query):
 
 		title = article['title']
 
-		# Check if article is deemed relevant enough
-		if similarityscore(query, title) >= 3.5:
+		# Check if article link is valid and title relevant enough, and article is not a video
+		if similarityscore(query, title) >= 3.5 and isvalidLink(article['url']) and article['author']:
 
 			id = article['source']['id']
 
@@ -68,8 +76,6 @@ def extractInfo(response, query):
 
 def addEvent(query):
 
-
-
 	response = getQuery(query)
 
 	text = open('JSON.txt', 'w')
@@ -84,4 +90,7 @@ def addEvent(query):
 newsAPI_sources = 'associated-press, cnn, the-hill, the-new-york-times, the-washington-post'
 
 # print(addEvent('stephen hawking dies'))
-
+# import urllib.request
+# from bs4 import BeautifulSoup
+# url = 'https://www.washingtonpost.com/world/europe/us-others-launch-new-tool-to-punish-chemical-weapons-users/2018/01/23/661a4940-0048-11e8-86b9-8908743c79dd_story.html'
+# print(isvalidLink(url))
