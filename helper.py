@@ -93,8 +93,8 @@ def addEvent(query):
 
 newsAPI_sources = 'associated-press, cnn, the-hill, the-new-york-times, the-washington-post'
 
-print(addEvent('stephen hawking dies'))
+# print(addEvent('stephen hawking dies'))
 # import urllib.request
 # from bs4 import BeautifulSoup
-# url = 'https://www.washingtonpost.com/world/europe/us-others-launch-new-tool-to-punish-chemical-weapons-users/2018/01/23/661a4940-0048-11e8-86b9-8908743c79dd_story.html'
-# print(isvalidLink(url))
+url = 'http://thehill.com/homenews/house/382176-ryan-responsible-nations-cant-tolerate-chemical-attack-in-syria'
+print(isvalidLink(url))

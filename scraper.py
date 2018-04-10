@@ -1,5 +1,6 @@
 import urllib.request
 from bs4 import BeautifulSoup
+import gzip
 
 filepath = '/Users/Aurea/Desktop/GitHub/News-Analysis/textfiles/'
 
@@ -56,8 +57,11 @@ def hillscraper(url, textname):
     textname: strinp
     Output: text file with textname containing article
     """
+    
+    page = urllib.request.urlopen(url)
+    pagedata = gzip.decompress(page.read())
+    soup = BeautifulSoup(pagedata)
 
-    soup = BeautifulSoup(urllib.request.urlopen(url), 'html.parser')
     text = open(str(textname), 'wb')
 
     soupArticle = soup.find('div', {'class':'field-item even', 'property': 'content:encoded'})
@@ -223,6 +227,14 @@ def scrapArticle(url, id):
 # cnnscraper(cnn1, filepath + 'cnn1')
 # cnnscraper(cnn2, filepath + 'cnn2')
 
-# test = 'http://thehill.com/policy/international/372173-syria-rejects-us-accusations-of-chemical-weapons-use'
-# hillscraper(test, filepath + 'hill1')
+
+
+url = 'http://thehill.com/homenews/house/382176-ryan-responsible-nations-cant-tolerate-chemical-attack-in-syria'
+# hillscraper(url, filepath + 'hill1')
+
+url = 'http://thehill.com/homenews/administration/382373-trump-fbi-raid-on-cohen-a-disgrace'
+url = 'http://thehill.com/homenews/house/382300-gop-looks-to-reduce-spending-after-hearing-criticism-back-home'
+# soup = BeautifulSoup(urllib.request.urlopen(url), 'html.parser')
+
+# soupArticle = soup.find('div', {'class':'field-item even', 'property': 'content:encoded'})
 
