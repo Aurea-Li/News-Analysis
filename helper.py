@@ -51,23 +51,27 @@ def extractInfo(response, query):
 
 			id = article['source']['id']
 
+			# Scrap article and determine word count
+			textfp = scrapArticle(article['url'], id)
+			wordcount = wordcounter(textfp)
+
 			# If first article from source or the earliest article from said source, save
-			if id not in publishdelay or (id in publishdelay and convertDatetime(article['publishedAt']) < publishdelay[id]['datetime']):
+			if id not in publishdelay:
+				publishdelay[id] = [{'datetime': convertDatetime(article['publishedAt']), 'title': title, 'word count': wordcount}]
 
-				
-				# Scrap article and determine word count
-				textfp = scrapArticle(article['url'], id)
-				wordcount = wordcounter(textfp)
-				publishdelay[id] = {'datetime': convertDatetime(article['publishedAt']), 'title': title, 'word count': wordcount}
+			elif convertDatetime(article['publishedAt']) < publishdelay[id][0]['datetime']:
+				publishdelay[id].insert(0, {'datetime': convertDatetime(article['publishedAt']), 'title': title, 'word count': wordcount})
 
+			else:
+				publishdelay[id].append({'datetime': convertDatetime(article['publishedAt']), 'title': title, 'word count': wordcount})
 
 	# Get time of earliest published article (time zero)
-	time_zero = min([publishdelay[key]['datetime'] for key in publishdelay])
+	time_zero = min([publishdelay[key][0]['datetime'] for key in publishdelay])
 
 
 	# Calculate delay time of every other article
 	for source in publishdelay:
-		publishdelay[source]['delay time'] = (publishdelay[source]['datetime'] - time_zero).total_seconds() / 60.0 
+		publishdelay[source][0]['delay time'] = (publishdelay[source][0]['datetime'] - time_zero).total_seconds() / 60.0 
 
 	return publishdelay
 
@@ -89,7 +93,7 @@ def addEvent(query):
 
 newsAPI_sources = 'associated-press, cnn, the-hill, the-new-york-times, the-washington-post'
 
-# print(addEvent('stephen hawking dies'))
+print(addEvent('stephen hawking dies'))
 # import urllib.request
 # from bs4 import BeautifulSoup
 # url = 'https://www.washingtonpost.com/world/europe/us-others-launch-new-tool-to-punish-chemical-weapons-users/2018/01/23/661a4940-0048-11e8-86b9-8908743c79dd_story.html'

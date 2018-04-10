@@ -20,6 +20,15 @@ nyt1 = 'https://www.nytimes.com/2018/02/22/opinion/guns-nasty-brutish-trump.html
 nyt2 = 'https://www.nytimes.com/2018/02/03/us/politics/trump-memo-vindicates.html'
 nyt3 = 'https://www.nytimes.com/2018/02/14/us/politics/trump-immigration-veto-threat.html'
 
+def getParagraphs(soupObject):
+    try:
+        return soupObject.find_all(['p'])
+    except:
+        return soupObject.find(['p'])
+
+
+
+
 def waposcraper(url, textname):
 
     soup = BeautifulSoup(urllib.request.urlopen(url), 'html.parser')
@@ -44,14 +53,16 @@ def waposcraper(url, textname):
 def hillscraper(url, textname):
     """
     url: string
-    textname: string
+    textname: strinp
     Output: text file with textname containing article
     """
 
     soup = BeautifulSoup(urllib.request.urlopen(url), 'html.parser')
     text = open(str(textname), 'wb')
 
-    firstparagraphs = soup.find('div', {'class':'field-item even', 'property': 'content:encoded'}).find_all(['p'])
+    soupArticle = soup.find('div', {'class':'field-item even', 'property': 'content:encoded'})
+
+    firstparagraphs = getParagraphs(soupArticle)
 
 
     # Getting rid of annoying hyperlinks to other articles
@@ -212,4 +223,6 @@ def scrapArticle(url, id):
 # cnnscraper(cnn1, filepath + 'cnn1')
 # cnnscraper(cnn2, filepath + 'cnn2')
 
+# test = 'http://thehill.com/policy/international/372173-syria-rejects-us-accusations-of-chemical-weapons-use'
+# hillscraper(test, filepath + 'hill1')
 

@@ -27,8 +27,6 @@ def index():
         query = request.form.get("query")
         delaydict = addEvent(query)
 
-        print(delaydict)
-
         return render_template("output.html", query = query, delaydict = delaydict)
 
     else:
@@ -42,8 +40,8 @@ def fig(query):
     delaydict = addEvent(query)
 
     # Creating x and y axis
-    x = [delaydict[key]['delay time'] for key in delaydict]
-    y = [delaydict[key]['word count'] for key in delaydict]
+    x = [delaydict[key][0]['delay time'] for key in delaydict]
+    y = [delaydict[key][0]['word count'] for key in delaydict]
     labels = [key for key in delaydict]
 
     # Create matplotlib figure
