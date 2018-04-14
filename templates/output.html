@@ -16,7 +16,7 @@
         {% for source in delaydict %}
         <tr>
             <td> {{ source }} </td>
-            <td> {{ delaydict[source]['title'] }} </td>
+            <td> {{ delaydict[source][0]['title'] }} </td>
         </tr>
         {% endfor %}
 

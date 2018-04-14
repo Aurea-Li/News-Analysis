@@ -59,11 +59,12 @@ def extractInfo(response, query):
 			if id not in publishdelay:
 				publishdelay[id] = [{'datetime': convertDatetime(article['publishedAt']), 'title': title, 'word count': wordcount}]
 
-			elif convertDatetime(article['publishedAt']) < publishdelay[id][0]['datetime']:
-				publishdelay[id].insert(0, {'datetime': convertDatetime(article['publishedAt']), 'title': title, 'word count': wordcount})
+			elif len(publishdelay[id]) < 3:
+				if convertDatetime(article['publishedAt']) < publishdelay[id][0]['datetime']:
+					publishdelay[id].insert(0, {'datetime': convertDatetime(article['publishedAt']), 'title': title, 'word count': wordcount})
 
-			else:
-				publishdelay[id].append({'datetime': convertDatetime(article['publishedAt']), 'title': title, 'word count': wordcount})
+				else:
+					publishdelay[id].append({'datetime': convertDatetime(article['publishedAt']), 'title': title, 'word count': wordcount})
 
 	# Get time of earliest published article (time zero)
 	time_zero = min([publishdelay[key][0]['datetime'] for key in publishdelay])
@@ -91,10 +92,10 @@ def addEvent(query):
 
 
 
-newsAPI_sources = 'associated-press, cnn, the-hill, the-new-york-times, the-washington-post'
+newsAPI_sources = 'associated-press, cnn, the-new-york-times, the-washington-post'
 
 # print(addEvent('stephen hawking dies'))
-# import urllib.request
-# from bs4 import BeautifulSoup
-url = 'http://thehill.com/homenews/house/382176-ryan-responsible-nations-cant-tolerate-chemical-attack-in-syria'
-print(isvalidLink(url))
+# # import urllib.request
+# # from bs4 import BeautifulSoup
+# url = 'http://thehill.com/homenews/house/382176-ryan-responsible-nations-cant-tolerate-chemical-attack-in-syria'
+# print(isvalidLink(url))

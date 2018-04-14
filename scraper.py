@@ -30,6 +30,7 @@ def getParagraphs(soupObject):
 
 
 
+
 def waposcraper(url, textname):
 
     soup = BeautifulSoup(urllib.request.urlopen(url), 'html.parser')
@@ -58,15 +59,27 @@ def hillscraper(url, textname):
     Output: text file with textname containing article
     """
     
-    page = urllib.request.urlopen(url)
-    pagedata = gzip.decompress(page.read())
-    soup = BeautifulSoup(pagedata)
+    page = urllib.request.request(url)
+
+    try:
+        pagedata = gzip.decompress(page.read())
+        soup = Beautifulsoup(pagedata)
+        print('gzip')
+    except:
+        soup = BeautifulSoup(page, 'html.parser')
+        print('html')
+
+
+    print(soup)
 
     text = open(str(textname), 'wb')
 
     soupArticle = soup.find('div', {'class':'field-item even', 'property': 'content:encoded'})
 
-    firstparagraphs = getParagraphs(soupArticle)
+    firstparagraphs = soup.find('div', {'class':'field-item even', 'property': 'content:encoded'})
+
+
+    # firstparagraphs = getParagraphs(soupArticle)
 
 
     # Getting rid of annoying hyperlinks to other articles
@@ -94,7 +107,26 @@ def apscraper(url, textname):
     soup = BeautifulSoup(urllib.request.urlopen(url), 'html.parser')
     text = open(str(textname), 'wb')
 
+
     paragraphs = soup.find('div', {'class':'articleBody'}).find_all(['p'])
+    article = b'\n'.join([p.text.encode('utf8') for p in paragraphs])       
+
+    text.write(article)
+    text.close()
+
+def reutersscraper(url, textname):
+
+    soup = BeautifulSoup(urllib.request.urlopen(url), 'lxml')
+    text = open(str(textname), 'wb')
+
+    print(soup.find_all(['div']))
+
+    # print(soup.p)
+    paragraphs = soup.find('div', {'class':'body_1gnLA'})
+
+    print(paragraphs)
+    paragraphs = soup.find_all(['p'])
+
     article = b'\n'.join([p.text.encode('utf8') for p in paragraphs])       
 
     text.write(article)
@@ -201,7 +233,7 @@ def scrapArticle(url, id):
 #        'q=trump&'
 #        'language=en&'
 #        'pagesize=20&'
-#        'sources=the-new-york-times&'
+#        'sources=reuters&'
 # 	   'sortBy=relevancy&'
 #        'apiKey=' + news_key)
 
@@ -229,11 +261,12 @@ def scrapArticle(url, id):
 
 
 
-url = 'http://thehill.com/homenews/house/382176-ryan-responsible-nations-cant-tolerate-chemical-attack-in-syria'
-# hillscraper(url, filepath + 'hill1')
+# url = 'http://thehill.com/homenews/house/382176-ryan-responsible-nations-cant-tolerate-chemical-attack-in-syria'
 
-url = 'http://thehill.com/homenews/administration/382373-trump-fbi-raid-on-cohen-a-disgrace'
-url = 'http://thehill.com/homenews/house/382300-gop-looks-to-reduce-spending-after-hearing-criticism-back-home'
+
+# url = 'https://uk.reuters.com/article/uk-usa-trump-trade/trump-weighs-tariffs-quotas-on-u-s-steel-aluminium-imports-idUKKCN1FY0XH'
+
+# reutersscraper(url, filepath + 'reuter1')
 # soup = BeautifulSoup(urllib.request.urlopen(url), 'html.parser')
 
 # soupArticle = soup.find('div', {'class':'field-item even', 'property': 'content:encoded'})
