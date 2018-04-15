@@ -3,7 +3,7 @@ from io import BytesIO
 from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
 import numpy as np
 import matplotlib.pyplot as plt
-from helper import addEvent
+from helper import addEvent, swapArticles
 
 # Configure application
 app = Flask(__name__)
@@ -32,10 +32,17 @@ def index():
     else:
         return render_template("index.html")
 
-@app.route("/update/<title>")
-def update(title):
+@app.route("/update/<delaydict>/<query>/<source>/<i>")
+def update(delaydict, query, source, i):
 
-    return render_template("apology.html")
+
+    print(type(delaydict))
+
+    # print(delaydict[str(source)])
+
+
+    delaydict = swapArticles(delaydict, source, i)
+    return render_template("output.html", query = query, delaydict = delaydict)
 
 
 # Embed graph

@@ -32,7 +32,7 @@
 
 
                 <td>
-                <a href="{{ url_for('update', title = delaydict[source][i]['title']) }} ">
+                <a href="{{ url_for('update', delaydict = delaydict, query = query, source = source, i = i) }} ">
                      {{ delaydict[source][i]['title'] }}
                 </a>
                 </td>

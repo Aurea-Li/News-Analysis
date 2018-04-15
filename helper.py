@@ -25,6 +25,17 @@ def isvalidLink(url):
 		return False
 	return True
 
+def swapArticles(delaydict, source, i):
+
+	i = int(i)
+
+	newArticle = delaydict[source][1]
+	oldArticle = delaydict[source][0]
+
+	delaydict[source][0] = newArticle
+	delaydict[source][1] = oldArticle
+
+	return delaydict
 
 def getQuery(query):
 
