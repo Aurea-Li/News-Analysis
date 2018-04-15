@@ -16,15 +16,26 @@
 
         {% for source in delaydict %}
         <tr class="{{ source }}FirstArticle">
-            <td><a href="#" class="toggler" data-source="{{ source }}"> {{ source }} </a></td>
+            <td>
+                <a href="#" class="toggler" data-source="{{ source }}"> 
+                    {{ source }} 
+                </a>
+            </td>
+
             <td> {{ delaydict[source][0]['title'] }} </td>
             <td> {{ delaydict[source][0]['datetime'] }} </td>
         </tr>
 
             {% for i in range(1, delaydict[source]| length) %}
             <tr class="{{ source }}" style="display:none">
-                <td> {{ source }} </td>
-                <td> {{ delaydict[source][i]['title'] }} </td>  
+                <td>  {{ source }} </td>
+
+
+                <td>
+                <a href="{{ url_for('update', title = delaydict[source][i]['title']) }} ">
+                     {{ delaydict[source][i]['title'] }}
+                </a>
+                </td>
                 <td> {{ delaydict[source][i]['datetime'] }} </td>  
             </tr>
             {% endfor %}

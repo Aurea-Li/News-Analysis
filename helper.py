@@ -83,11 +83,6 @@ def addEvent(query):
 
 	response = getQuery(query)
 
-	text = open('JSON.txt', 'w')
-	text.write(json.dumps(response, indent=4))
-	text.close()
-
-	
 	return extractInfo(response, query)
 
 

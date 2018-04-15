@@ -16,7 +16,7 @@ def after_request(response):
     response.headers["Pragma"] = "no-cache"
     return response
 
-@app.route("/", methods=["GET", "POST"])
+@app.route("/", methods=["GET", "POST", "PUT"])
 def index():
 
     if request.method == "POST":
@@ -31,6 +31,11 @@ def index():
 
     else:
         return render_template("index.html")
+
+@app.route("/update/<title>")
+def update(title):
+
+    return render_template("apology.html")
 
 
 # Embed graph
