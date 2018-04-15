@@ -27,8 +27,6 @@ def index():
         query = request.form.get("query")
         delaydict = addEvent(query)
 
-        # print(delaydict)
-
         return render_template("output.html", query = query, delaydict = delaydict)
 
     else:

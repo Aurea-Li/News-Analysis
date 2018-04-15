@@ -9,17 +9,37 @@
         <tr>
             <th> Source </th>
             <th> Title </th>
+            <th> Publish Time </th>
         </tr>
     </thead>
     <tbody>
 
         {% for source in delaydict %}
-        <tr>
-            <td> {{ source }} </td>
+        <tr class="{{ source }}FirstArticle">
+            <td><a href="#" class="toggler" data-source="{{ source }}"> {{ source }} </a></td>
             <td> {{ delaydict[source][0]['title'] }} </td>
+            <td> {{ delaydict[source][0]['datetime'] }} </td>
         </tr>
-        {% endfor %}
 
+            {% for i in range(1, delaydict[source]| length) %}
+            <tr class="{{ source }}" style="display:none">
+                <td> {{ source }} </td>
+                <td> {{ delaydict[source][i]['title'] }} </td>  
+                <td> {{ delaydict[source][i]['datetime'] }} </td>  
+            </tr>
+            {% endfor %}
+
+        {% endfor %}
+<script>
+
+$(document).ready(function(){ 
+    $(".toggler").click(function(e){ 
+        e.preventDefault(); 
+        $('.'+$(this).attr('data-source')).toggle();
+    }); 
+});
+
+</script>
     </tbody>
 </table>
 
