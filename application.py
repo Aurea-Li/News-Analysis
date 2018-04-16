@@ -32,14 +32,10 @@ def index():
     else:
         return render_template("index.html")
 
-@app.route("/update/<delaydict>/<query>/<source>/<i>")
-def update(delaydict, query, source, i):
+@app.route("/update/<query>/<source>/<i>")
+def update(query, source, i):
 
-
-    print(type(delaydict))
-
-    # print(delaydict[str(source)])
-
+    delaydict = addEvent(query)
 
     delaydict = swapArticles(delaydict, source, i)
     return render_template("output.html", query = query, delaydict = delaydict)
